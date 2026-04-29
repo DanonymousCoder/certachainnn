@@ -1,4 +1,3 @@
-import React from 'react';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import CredentialCard from '../components/profile/CredentialCard';
 import VerificationSidebar from '../components/profile/VerificationSidebar';

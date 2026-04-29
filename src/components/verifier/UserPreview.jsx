@@ -1,4 +1,3 @@
-import React from 'react';
 import ProfileHeader from '../profile/ProfileHeader';
 
 const UserPreview = () => {

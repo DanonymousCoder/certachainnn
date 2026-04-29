@@ -23,11 +23,11 @@ export default function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <Button variant="primary" className="flex items-center justify-center gap-2 group">
+            <Button to="/profile/1" variant="primary" className="flex items-center justify-center gap-2 group">
               Claim Credentials
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button variant="secondary">
+            <Button to="/dashboard/overview" variant="secondary">
               Join as Institution
             </Button>
           </div>

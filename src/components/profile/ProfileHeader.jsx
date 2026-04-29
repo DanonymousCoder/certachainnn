@@ -1,4 +1,3 @@
-import React from 'react';
 import { MapPin, GraduationCap, Globe, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 const ProfileHeader = () => (

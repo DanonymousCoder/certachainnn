@@ -1,4 +1,3 @@
-import React from 'react';
 import { QrCode, Copy, Download, Share2, ShieldCheck } from 'lucide-react';
 
 const VerificationSidebar = () => (

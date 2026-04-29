@@ -43,7 +43,10 @@ const AIReportCard = () => (
           <p className="text-xs font-bold text-slate-700">85 / 100</p>
         </div>
         <div className="w-full h-2.5 bg-indigo-50 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-purple-500 to-emerald-400 w-[85%] rounded-full" />
+          <div
+            className="h-full w-[85%] rounded-full"
+            style={{ backgroundImage: 'linear-gradient(to right, #a855f7, #34d399)' }}
+          />
         </div>
       </div>
 

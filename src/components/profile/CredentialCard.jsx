@@ -1,4 +1,3 @@
-import React from 'react';
 import { ExternalLink, Landmark, Shield, Briefcase, Award } from 'lucide-react';
 
 const CredentialCard = ({ title, issuer, date, type, icon }) => (

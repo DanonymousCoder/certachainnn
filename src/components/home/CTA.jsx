@@ -14,11 +14,12 @@ export default function CTA() {
         </p>
 
         <div className="flex gap-4 justify-center flex-col sm:flex-row pt-4">
-          <Button variant="gradient">
+          <Button to="/verifier" variant="gradient">
             Get Started Now
           </Button>
-          <Button 
-            variant="ghost" 
+          <Button
+            to="/home"
+            variant="ghost"
             className="text-white border-2 border-gray-600 hover:bg-gray-800"
           >
             View Demo Registry

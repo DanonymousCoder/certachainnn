@@ -1,4 +1,3 @@
-import React from 'react';
 import Sidebar from '../features/dashboard/Sidebar';
 import SearchInput from '../components/verifier/SearchInput';
 import UserPreview from '../components/verifier/UserPreview';

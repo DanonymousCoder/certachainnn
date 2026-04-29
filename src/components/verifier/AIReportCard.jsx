@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrainCircuit } from 'lucide-react';
 
 const AIReportCard = () => (
