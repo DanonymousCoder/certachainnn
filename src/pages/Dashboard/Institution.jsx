@@ -10,11 +10,12 @@ export default function Institution() {
     <div className="flex min-h-screen bg-[#f8f9ff] flex-col">
       <Navbar />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-10 lg:py-14">
-        <div className="grid lg:grid-cols-[260px_minmax(0,1fr)] gap-8">
+      <main className="flex-1 w-full">
+        <div className="flex items-start">
           <Sidebar />
 
-          <section className="space-y-8">
+          <section className="flex-1">
+            <div className="max-w-7xl mx-auto w-full px-6 py-10 lg:py-14 space-y-8">
             <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h1 className="text-2xl font-bold text-slate-800">Dashboard Overview</h1>
@@ -79,6 +80,7 @@ export default function Institution() {
             </div>
 
             <ActivityTable />
+            </div>
           </section>
         </div>
       </main>

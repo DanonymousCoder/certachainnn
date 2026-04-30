@@ -9,15 +9,12 @@ export default function Overview() {
     <div className="bg-gray-50 min-h-screen">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <Sidebar />
-          </div>
+      <main className="w-full">
+        <div className="flex items-start">
+          <Sidebar />
 
-          {/* Main Content */}
-          <div className="lg:col-span-3 space-y-8">
+          <div className="flex-1">
+            <div className="max-w-7xl mx-auto px-6 py-16 space-y-8">
             <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
 
             {/* Stats Grid */}
@@ -29,6 +26,7 @@ export default function Overview() {
 
             {/* Activity Table */}
             <ActivityTable />
+            </div>
           </div>
         </div>
       </main>

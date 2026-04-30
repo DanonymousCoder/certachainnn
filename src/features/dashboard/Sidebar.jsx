@@ -1,34 +1,55 @@
-import { NavLink } from 'react-router-dom';
+import React from 'react';
+import {
+  LayoutDashboard,
+  Award,
+  BarChart2,
+  BookOpen,
+  Settings,
+  Plus
+} from 'lucide-react';
 
-export default function Sidebar() {
+const Sidebar = () => {
   const menuItems = [
-    { label: 'Overview', href: '/dashboard/overview' },
-    { label: 'Institution', href: '/dashboard/institution' },
-    { label: 'AI Skill Verifier', href: '/dashboard/verifier' },
-    { label: 'Legacy Verifier', href: '/dashboard/verifier-legacy' },
-    { label: 'Student Profile', href: '/profile/1' },
-    { label: 'Landing', href: '/' },
-    { label: 'Classic Home', href: '/home' },
+    { name: 'Dashboard', icon: <LayoutDashboard size={18} />, active: true },
+    { name: 'Issue Credentials', icon: <Award size={18} /> },
+    { name: 'Analytics', icon: <BarChart2 size={18} /> },
+    { name: 'Registry', icon: <BookOpen size={18} /> },
+    { name: 'Settings', icon: <Settings size={18} /> },
   ];
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 h-fit sticky top-6">
-      <h3 className="text-lg font-bold text-gray-900 mb-6">Menu</h3>
-      <nav className="space-y-2">
+    <aside className="hidden lg:flex flex-col w-64 h-screen bg-white border-r border-slate-100 sticky top-0 p-6 ml-0">
+      <div className="mb-10">
+        <h2 className="font-bold text-slate-900 text-lg">Institution Portal</h2>
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+          Solana Network
+        </p>
+      </div>
+
+      <nav className="flex-1 space-y-1">
         {menuItems.map((item) => (
-          <NavLink
-            key={item.label}
-            to={item.href}
-            className={({ isActive }) =>
-              `block px-4 py-2 rounded-lg font-medium transition-colors ${
-                isActive ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-gray-50'
-              }`
-            }
+          <button
+            key={item.name}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
+              item.active
+                ? 'bg-slate-100 text-slate-900'
+                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
+            }`}
           >
-            {item.label}
-          </NavLink>
+            {item.icon}
+            {item.name}
+          </button>
         ))}
       </nav>
-    </div>
+
+      <div className="mt-auto pt-6 border-t border-slate-50">
+        <button className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-purple-600 to-teal-500 hover:from-purple-700 hover:to-teal-600 text-white py-3 rounded-lg font-bold text-sm shadow-md transition-all">
+          <Plus size={18} />
+          Mint Certificate
+        </button>
+      </div>
+    </aside>
   );
-}
+};
+
+export default Sidebar;

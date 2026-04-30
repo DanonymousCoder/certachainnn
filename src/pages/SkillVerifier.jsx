@@ -9,10 +9,10 @@ const SkillVerifier = () => {
     <div>
       <Navbar />
 
-      <div className="flex min-h-screen bg-[#f8f9ff] px-4 sm:px-6 lg:px-8 py-10">
-      <Sidebar />
+      <div className="flex min-h-screen bg-[#f8f9ff]">
+        <Sidebar />
 
-      <main className="flex-1 p-4 md:p-8 lg:p-12 space-y-8">
+        <main className="flex-1 p-4 md:p-8 lg:p-12 py-10 space-y-8">
         <header className="space-y-2">
           <h1 className="text-3xl font-bold text-slate-900">AI Skill Verifier</h1>
           <p className="text-slate-500 text-sm max-w-xl">
