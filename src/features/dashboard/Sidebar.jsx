@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 export default function Sidebar() {
   const menuItems = [
     { label: 'Overview', href: '/dashboard/overview' },
+    { label: 'Institution', href: '/dashboard/institution' },
     { label: 'AI Skill Verifier', href: '/dashboard/verifier' },
     { label: 'Legacy Verifier', href: '/dashboard/verifier-legacy' },
     { label: 'Student Profile', href: '/profile/1' },

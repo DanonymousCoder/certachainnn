@@ -11,7 +11,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           <p className="text-sm font-semibold text-gray-600">
-            © 2024 CERTACHAIN PROTOCOL. SOLANA-VERIFIED ACADEMIC LEDGER.
+            © 2026 CERTACHAIN PROTOCOL. SOLANA-VERIFIED ACADEMIC LEDGER.
           </p>
           <div className="flex flex-wrap justify-center gap-8">
             {links.map((link) => (

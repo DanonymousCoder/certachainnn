@@ -3,6 +3,7 @@ import LandingPage from './pages/LandingPage';
 import Home from './pages/Home';
 import StudentProfile from './pages/StudentProfile';
 import Overview from './pages/Dashboard/Overview';
+import Institution from './pages/Dashboard/Institution';
 import Verifier from './pages/Dashboard/Verifier';
 import SkillVerifier from './pages/SkillVerifier';
 
@@ -18,6 +19,7 @@ export default function App() {
         {/* Dashboard Routes */}
         <Route path="/dashboard" element={<Overview />} />
         <Route path="/dashboard/overview" element={<Overview />} />
+        <Route path="/dashboard/institution" element={<Institution />} />
         <Route path="/dashboard/verifier" element={<SkillVerifier />} />
         <Route path="/dashboard/verifier-legacy" element={<Verifier />} />
         <Route path="/verifier" element={<SkillVerifier />} />

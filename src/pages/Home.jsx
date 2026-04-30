@@ -12,7 +12,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center">
+      <main className="max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] gap-16 items-center">
         <div className="space-y-8">
           <Badge type="solana">
             <CheckCircle2 size={12} className="mr-1" />
@@ -38,8 +38,10 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="lg:flex hidden">
-          <CredentialCard />
+        <div className="flex justify-center lg:justify-end">
+          <div className="w-full max-w-md mx-auto lg:mx-0">
+            <CredentialCard />
+          </div>
         </div>
       </main>
 

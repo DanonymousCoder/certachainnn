@@ -14,7 +14,7 @@ export default function CTA() {
         </p>
 
         <div className="flex gap-4 justify-center flex-col sm:flex-row pt-4">
-          <Button to="/verifier" variant="gradient">
+          <Button to="/verifier" className='bg-indigo-600'>
             Get Started Now
           </Button>
           <Button

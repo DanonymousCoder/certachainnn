@@ -6,7 +6,7 @@ import CredentialCard from '../profile/CredentialCard';
 export default function Hero() {
   return (
     <section className="px-6 py-24 lg:py-32 max-w-7xl mx-auto">
-      <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="grid lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] gap-16 items-center">
         {/* Left Column: Text Content */}
         <div className="space-y-8">
           <Badge type="solana">
@@ -34,8 +34,8 @@ export default function Hero() {
         </div>
 
         {/* Right Column: Credential Card */}
-        <div className="hidden lg:flex justify-center">
-          <div className="w-full max-w-md">
+        <div className="flex justify-center lg:justify-end">
+          <div className="w-full max-w-md mx-auto lg:mx-0">
             <CredentialCard />
           </div>
         </div>
