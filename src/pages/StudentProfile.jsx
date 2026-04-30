@@ -1,3 +1,5 @@
+import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import CredentialCard from '../components/profile/CredentialCard';
 import VerificationSidebar from '../components/profile/VerificationSidebar';
@@ -11,8 +13,10 @@ const StudentProfile = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8f9ff] pb-20">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-[#f8f9ff] flex flex-col">
+      <Navbar />
+
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-10">
             <ProfileHeader />
@@ -36,6 +40,8 @@ const StudentProfile = () => {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 };
