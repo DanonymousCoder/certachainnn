@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3050/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
 
 const parseError = async (response, fallbackMessage) => {
   const errorData = await response.json().catch(() => null);
@@ -10,12 +10,41 @@ const parseError = async (response, fallbackMessage) => {
   return errorData?.error || fallbackMessage;
 };
 
+export const copyToClipboard = async (text) => {
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } else {
+      // Fallback for non-secure contexts
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        return true;
+      } catch (err) {
+        document.body.removeChild(textArea);
+        return false;
+      }
+    }
+  } catch (err) {
+    return false;
+  }
+};
+
 export const issueCertificate = async (payload) => {
+  // If payload is FormData, we don't set Content-Type header (browser does it with boundary)
+  const isFormData = payload instanceof FormData;
+  
   const response = await fetch(`${API_BASE_URL}/certificates/issue`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+    body: isFormData ? payload : JSON.stringify(payload)
   });
+
   if (!response.ok) {
     throw new Error(await parseError(response, 'Failed to issue certificate'));
   }

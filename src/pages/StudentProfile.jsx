@@ -48,6 +48,7 @@ const StudentProfile = () => {
             type: 'CERTIFICATION',
             icon: 'shield',
             ipfsGatewayUrl: c.ipfsGatewayUrl,
+            fileGatewayUrl: c.fileGatewayUrl,
             studentName: c.studentName,
             course: c.course
           })));

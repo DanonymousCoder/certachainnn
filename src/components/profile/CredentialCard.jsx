@@ -1,6 +1,6 @@
 import { ExternalLink, Landmark, Shield, Briefcase, Award } from 'lucide-react';
 
-const CredentialCard = ({ title, issuer, date, type, icon, certId, ipfsGatewayUrl }) => {
+const CredentialCard = ({ title, issuer, date, type, icon, certId, ipfsGatewayUrl, fileGatewayUrl }) => {
   const hasLiveData = Boolean(title || issuer || certId);
 
   return (
@@ -33,15 +33,29 @@ const CredentialCard = ({ title, issuer, date, type, icon, certId, ipfsGatewayUr
               <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest">Certificate ID</p>
               <span className="text-[10px] font-mono text-slate-400 break-all">{certId}</span>
             </div>
-            {ipfsGatewayUrl ? (
-              <a
-                href={ipfsGatewayUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="shrink-0 text-[10px] font-bold text-indigo-500 flex items-center gap-1 hover:underline"
-              >
-                View Metadata <ExternalLink size={10} />
-              </a>
+            {ipfsGatewayUrl || fileGatewayUrl ? (
+              <div className="flex flex-col gap-2 shrink-0">
+                {ipfsGatewayUrl && (
+                  <a
+                    href={ipfsGatewayUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[9px] font-bold text-indigo-500 flex items-center gap-1 hover:underline"
+                  >
+                    Metadata <ExternalLink size={10} />
+                  </a>
+                )}
+                {fileGatewayUrl && (
+                  <a
+                    href={fileGatewayUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[9px] font-bold text-emerald-600 flex items-center gap-1 hover:underline bg-emerald-50 px-1.5 py-0.5 rounded"
+                  >
+                    View File <ExternalLink size={10} />
+                  </a>
+                )}
+              </div>
             ) : null}
           </div>
         </>

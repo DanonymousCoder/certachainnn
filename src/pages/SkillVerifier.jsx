@@ -3,7 +3,7 @@ import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Link2, CheckCircle2, BrainCircuit, Download, Share2, ScanLine, Loader2, Copy, Check } from 'lucide-react';
 import Sidebar from '../features/dashboard/Sidebar';
-import { getStudentCredentials, generateSkillReport } from '../utils/api';
+import { getStudentCredentials, generateSkillReport, copyToClipboard } from '../utils/api';
 import { QRCodeSVG } from 'qrcode.react';
 
 const SkillVerifier = () => {
@@ -53,10 +53,14 @@ const SkillVerifier = () => {
     }
   };
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(verificationUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleShare = async () => {
+    const success = await copyToClipboard(verificationUrl);
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } else {
+      alert("Failed to copy link. Please manually copy the URL from your browser.");
+    }
   };
 
   const handleDownload = () => {
@@ -202,7 +206,7 @@ const SkillVerifier = () => {
               </div>
               <div>
                 <p className="font-bold text-sm text-slate-800">Scan to Verify</p>
-                <p className="text-xs text-slate-500">Instant mobile verification for in-person validation.</p>
+                <p className="text-[10px] text-slate-500 max-w-[150px]">Scan with your phone to test instant mobile verification.</p>
               </div>
             </div>
             <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">

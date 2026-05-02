@@ -5,13 +5,14 @@ import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import Sidebar from '../features/dashboard/Sidebar';
 import { issueCertificate } from '../utils/api';
-import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { Loader2, CheckCircle, AlertCircle, Upload, FileText, X } from 'lucide-react';
 
 const IssueCertificate = () => {
   const { publicKey } = useWallet();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const [formData, setFormData] = useState({
     student_name: '',
@@ -20,6 +21,12 @@ const IssueCertificate = () => {
     grade: 'A',
     institution: 'CertaChain Academy'
   });
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,16 +37,22 @@ const IssueCertificate = () => {
     setError(null);
 
     try {
-      const payload = {
-        institutionWallet: publicKey.toBase58(),
-        studentDetails: {
-          ...formData,
-          name: `${formData.course} Certificate`,
-          description: `Verified completion of ${formData.course}`
-        }
+      const data = new FormData();
+      data.append('institutionWallet', publicKey.toBase58());
+      
+      const studentDetails = {
+        ...formData,
+        name: `${formData.course} Certificate`,
+        description: `Verified completion of ${formData.course}`
       };
+      
+      data.append('studentDetails', JSON.stringify(studentDetails));
+      
+      if (selectedFile) {
+        data.append('file', selectedFile);
+      }
 
-      const res = await issueCertificate(payload);
+      const res = await issueCertificate(data);
       if (res.success) {
         setSuccess(res);
         setFormData({
@@ -49,6 +62,7 @@ const IssueCertificate = () => {
           grade: 'A',
           institution: 'CertaChain Academy'
         });
+        setSelectedFile(null);
       }
     } catch (err) {
       setError(err.message);
@@ -84,19 +98,18 @@ const IssueCertificate = () => {
                       <CheckCircle className="text-emerald-500 shrink-0" size={20} />
                       <div>
                         <p className="text-emerald-800 font-bold text-sm">Certificate Issued Successfully!</p>
-                        <p className="text-emerald-600 text-xs mt-1">Certificate metadata was stored and linked through the live API.</p>
-                        <p className="text-emerald-600 text-[10px] font-mono mt-2 break-all">ID: {success.certId}</p>
-                        <p className="text-emerald-600 text-[10px] font-mono mt-2 break-all">Program: {success.program?.programId}</p>
-                        {success.ipfsGatewayUrl ? (
-                          <a
-                            href={success.ipfsGatewayUrl}
-                            target="_blank"
+                        <p className="text-emerald-600 text-xs mt-1">Transaction recorded on Solana Devnet.</p>
+                        {success.fileGatewayUrl && (
+                          <a 
+                            href={success.fileGatewayUrl} 
+                            target="_blank" 
                             rel="noreferrer"
-                            className="text-emerald-700 text-[10px] font-bold mt-2 inline-block underline"
+                            className="text-indigo-600 text-[10px] font-bold hover:underline block mt-1"
                           >
-                            View IPFS metadata
+                            View Uploaded Certificate File
                           </a>
-                        ) : null}
+                        )}
+                        <p className="text-emerald-600 text-[10px] font-mono mt-2 break-all">ID: {success.certId}</p>
                       </div>
                     </div>
                   )}
@@ -139,6 +152,38 @@ const IssueCertificate = () => {
                       value={formData.course}
                       onChange={(e) => setFormData({...formData, course: e.target.value})}
                     />
+                  </div>
+
+                  {/* File Upload Section */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Upload Certificate File (PDF/Image)</label>
+                    {!selectedFile ? (
+                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-200 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition-all">
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <Upload className="w-8 h-8 mb-3 text-slate-400" />
+                          <p className="mb-2 text-sm text-slate-500 font-semibold tracking-tight">Click to upload or drag and drop</p>
+                          <p className="text-xs text-slate-400">PDF, PNG, JPG (MAX. 5MB)</p>
+                        </div>
+                        <input type="file" className="hidden" accept=".pdf,image/*" onChange={handleFileChange} />
+                      </label>
+                    ) : (
+                      <div className="flex items-center justify-between p-4 bg-indigo-50 border border-indigo-100 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <FileText className="text-indigo-600" />
+                          <div>
+                            <p className="text-sm font-bold text-slate-800 truncate max-w-[200px]">{selectedFile.name}</p>
+                            <p className="text-[10px] text-indigo-600 font-medium">{(selectedFile.size / 1024).toFixed(1)} KB</p>
+                          </div>
+                        </div>
+                        <button 
+                          type="button"
+                          onClick={() => setSelectedFile(null)}
+                          className="p-1 hover:bg-indigo-100 rounded-full transition-colors"
+                        >
+                          <X size={18} className="text-indigo-600" />
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
