@@ -1,4 +1,4 @@
-import { ExternalLink, Landmark, Shield, Briefcase, Award } from 'lucide-react';
+import { ExternalLink, Landmark, Shield, Briefcase, Award, Download } from 'lucide-react';
 
 const CredentialCard = ({ title, issuer, date, type, icon, certId, ipfsGatewayUrl, fileGatewayUrl }) => {
   const hasLiveData = Boolean(title || issuer || certId);
@@ -50,9 +50,10 @@ const CredentialCard = ({ title, issuer, date, type, icon, certId, ipfsGatewayUr
                     href={fileGatewayUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-[9px] font-bold text-emerald-600 flex items-center gap-1 hover:underline bg-emerald-50 px-1.5 py-0.5 rounded"
+                    download
+                    className="text-[9px] font-bold text-emerald-600 flex items-center gap-1 hover:underline bg-emerald-50 px-2 py-1 rounded-lg transition-all hover:bg-emerald-100"
                   >
-                    View File <ExternalLink size={10} />
+                    <Download size={10} /> Download File
                   </a>
                 )}
               </div>

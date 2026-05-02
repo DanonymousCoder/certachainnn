@@ -1,22 +1,31 @@
-import { QrCode, Copy, Download, Share2, ShieldCheck } from 'lucide-react';
+import { QrCode, Copy, Download, Share2, ShieldCheck, Check } from 'lucide-react';
+import { useState } from 'react';
+import { copyToClipboard } from '../../utils/api';
+import { QRCodeSVG } from 'qrcode.react';
 
 const VerificationSidebar = ({ shareUrl }) => {
-  const copyShareLink = async () => {
-    if (!shareUrl || !navigator?.clipboard) {
-      return;
-    }
+  const [copied, setCopied] = useState(false);
 
-    await navigator.clipboard.writeText(shareUrl);
+  const copyShareLink = async () => {
+    const success = await copyToClipboard(shareUrl);
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const downloadCV = () => {
+    window.print();
   };
 
   return (
-    <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm space-y-8 sticky top-24">
+    <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm space-y-8 sticky top-24 print:hidden">
       <h3 className="text-xl font-bold text-slate-800">Verification Gateway</h3>
 
       <div className="border border-slate-900 p-6 rounded-xl space-y-4">
         <div className="bg-slate-900 rounded-lg p-6 flex flex-col items-center">
-          <div className="bg-white p-2 rounded-lg mb-4">
-            <QrCode size={140} className="text-slate-900" />
+          <div className="bg-white p-4 rounded-lg mb-4">
+            <QRCodeSVG value={shareUrl || window.location.href} size={120} />
           </div>
           <p className="text-[9px] font-black text-slate-400 tracking-[0.2em] uppercase">Scan to instantly verify</p>
           <div className="w-10 h-1 bg-[#7030d8] mt-3 rounded-full" />
@@ -27,24 +36,25 @@ const VerificationSidebar = ({ shareUrl }) => {
         <div className="space-y-2">
           <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Shareable Profile Link</label>
           <div className="flex items-center justify-between gap-3 bg-indigo-50/50 border border-indigo-100 p-3 rounded-lg">
-            <span className="text-[11px] font-mono text-indigo-900 break-all">{shareUrl}</span>
-            <button type="button" onClick={copyShareLink} className="text-indigo-400 cursor-pointer shrink-0">
-              <Copy size={14} />
+            <span className="text-[11px] font-mono text-indigo-900 break-all truncate">{shareUrl}</span>
+            <button type="button" onClick={copyShareLink} className="text-indigo-400 cursor-pointer shrink-0 hover:text-indigo-600 transition-colors">
+              {copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
             </button>
           </div>
         </div>
 
-        <button className="w-full bg-black text-white py-4 rounded-lg font-bold text-sm flex items-center justify-center gap-2">
+        <button 
+          onClick={downloadCV}
+          className="w-full bg-black text-white py-4 rounded-lg font-bold text-sm flex items-center justify-center gap-2 hover:bg-slate-800 transition-all"
+        >
           <Download size={18} /> Download Verified CV
         </button>
-        <a
-          href={shareUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="w-full bg-white border border-slate-200 text-slate-700 py-4 rounded-lg font-bold text-sm flex items-center justify-center gap-2"
+        <button
+          onClick={copyShareLink}
+          className="w-full bg-white border border-slate-200 text-slate-700 py-4 rounded-lg font-bold text-sm flex items-center justify-center gap-2 hover:bg-slate-50 transition-all"
         >
-          <Share2 size={18} /> Share Credentials
-        </a>
+          <Share2 size={18} /> {copied ? 'Link Copied!' : 'Share Credentials'}
+        </button>
       </div>
 
       <div className="bg-indigo-50 p-5 rounded-xl flex items-start gap-3">
