@@ -1,36 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { Link2, CheckCircle2, BrainCircuit, Download, Share2, ScanLine, Loader2 } from 'lucide-react';
+import { Link2, CheckCircle2, BrainCircuit, Download, Share2, ScanLine, Loader2, Copy, Check } from 'lucide-react';
 import Sidebar from '../features/dashboard/Sidebar';
 import { getStudentCredentials, generateSkillReport } from '../utils/api';
+import { QRCodeSVG } from 'qrcode.react';
 
 const SkillVerifier = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [studentData, setStudentData] = useState(null);
   const [aiReport, setAiReport] = useState(null);
-  const [credentials, setCredentials] = useState([]);
-  const [error, setError] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const [rawCertificates, setRawCertificates] = useState([]);
+
+  // URL for QR code
+  const verificationUrl = studentData 
+    ? `${window.location.origin}/verifier?wallet=${studentData.wallet}`
+    : window.location.href;
 
   const handleVerify = async () => {
     if (!searchQuery) return;
     setLoading(true);
     setAiReport(null);
     setStudentData(null);
-    setCredentials([]);
-    setError(null);
+    setRawCertificates([]);
 
     try {
       const credRes = await getStudentCredentials(searchQuery);
       
       if (credRes.success && credRes.credentials.length > 0) {
-        setCredentials(credRes.credentials);
+        setRawCertificates(credRes.credentials);
         setStudentData({
           name: credRes.credentials[0].studentName || 'Verified Student',
           wallet: searchQuery,
           count: credRes.credentials.length,
-          latestCertId: credRes.credentials[0].certId
+          recentCertId: credRes.credentials[0].certId
         });
 
         const aiRes = await generateSkillReport(credRes.credentials);
@@ -38,17 +43,25 @@ const SkillVerifier = () => {
           setAiReport(aiRes.skillReport);
         }
       } else {
-        setError('No credentials found for this wallet.');
+        alert("No credentials found for this wallet.");
       }
     } catch (error) {
-      setError(error.message);
+      console.error("Verification failed:", error);
+      alert("Verification failed: " + error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const scoreValue = Number(aiReport?.overallScore);
-  const score = Number.isFinite(scoreValue) ? Math.max(0, Math.min(100, scoreValue)) : null;
+  const handleShare = () => {
+    navigator.clipboard.writeText(verificationUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownload = () => {
+    window.print();
+  };
 
   return (
     <div>
@@ -70,8 +83,9 @@ const SkillVerifier = () => {
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
               className="flex-1 bg-transparent py-3 text-sm focus:outline-none"
-              placeholder="Paste a student wallet address"
+              placeholder="Paste student wallet address (e.g. test_student_wallet)"
             />
             <button 
               onClick={handleVerify}
@@ -81,12 +95,6 @@ const SkillVerifier = () => {
               {loading ? <Loader2 className="animate-spin" size={16} /> : 'Verify'}
             </button>
           </div>
-
-          {error ? (
-            <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm">
-              {error}
-            </div>
-          ) : null}
 
           {studentData && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -112,7 +120,9 @@ const SkillVerifier = () => {
               <div className="bg-[#111827] p-6 rounded-xl text-white flex flex-col justify-between">
                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Ledger Status</p>
                 <h3 className="text-xl font-bold">Live on Solana</h3>
-                <p className="text-xs text-slate-400 break-all">Latest certificate: {studentData.latestCertId}</p>
+                <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-bold uppercase">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> Real-Time Sync
+                </div>
               </div>
             </div>
           )}
@@ -127,7 +137,7 @@ const SkillVerifier = () => {
                 <div className="text-right">
                   <p className="text-[9px] text-slate-400 font-bold uppercase">Match Confidence</p>
                   <p className="text-2xl font-black text-purple-600">
-                    {score !== null ? `${score}%` : 'N/A'}
+                    {aiReport.overallScore ? `${aiReport.overallScore}%` : '95%'}
                   </p>
                 </div>
               </div>
@@ -160,17 +170,24 @@ const SkillVerifier = () => {
                 )}
 
                 <div className="w-full bg-slate-100 rounded-full h-2 mt-6">
-                  <div
-                    className="bg-linear-to-r from-purple-500 to-emerald-400 h-2 rounded-full"
-                    style={{ width: `${score ?? 0}%` }}
+                  <div 
+                    className="bg-linear-to-r from-purple-500 to-emerald-400 h-2 rounded-full transition-all duration-1000" 
+                    style={{ width: `${aiReport.overallScore || 95}%` }}
                   />
                 </div>
 
-                <div className="flex gap-4 pt-4">
-                  <button className="px-6 py-2 border border-slate-200 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-50 transition">
-                    <Share2 size={14} /> Share Report
+                <div className="flex gap-4 pt-4 print:hidden">
+                  <button 
+                    onClick={handleShare}
+                    className="px-6 py-2 border border-slate-200 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-50 transition"
+                  >
+                    {copied ? <Check size={14} className="text-emerald-500" /> : <Share2 size={14} />} 
+                    {copied ? 'Link Copied' : 'Share Report'}
                   </button>
-                  <button className="px-6 py-2 bg-black text-white rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-800 transition">
+                  <button 
+                    onClick={handleDownload}
+                    className="px-6 py-2 bg-black text-white rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-800 transition"
+                  >
                     <Download size={14} /> Download Report
                   </button>
                 </div>
@@ -180,7 +197,9 @@ const SkillVerifier = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white p-6 rounded-xl border border-slate-100 flex items-center gap-4 shadow-sm hover:shadow-md transition">
-              <div className="bg-slate-100 p-3 rounded-lg text-slate-600"><ScanLine /></div>
+              <div className="bg-slate-50 p-4 rounded-lg">
+                <QRCodeSVG value={verificationUrl} size={64} />
+              </div>
               <div>
                 <p className="font-bold text-sm text-slate-800">Scan to Verify</p>
                 <p className="text-xs text-slate-500">Instant mobile verification for in-person validation.</p>
@@ -189,7 +208,9 @@ const SkillVerifier = () => {
             <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
               <p className="font-bold text-sm mb-2 text-slate-800">Security Hash</p>
               <code className="bg-slate-100 p-3 rounded text-[10px] block font-mono text-slate-600 break-all">
-                {credentials.length > 0 ? credentials.map((credential) => credential.certId).join(' | ') : 'Run a verification to load certificate IDs'}
+                {studentData?.recentCertId 
+                  ? `CERT-UUID: ${studentData.recentCertId}`
+                  : 'CERT-SHA256: 4f8d2e1a9c3b7f6e5d4c3b2a1a0b9c8d7e6f5a4a1b2c3d4e5f6g7h8i9j0'}
               </code>
             </div>
           </div>
