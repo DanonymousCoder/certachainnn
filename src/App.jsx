@@ -1,32 +1,41 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import WalletContextProvider from './components/WalletContextProvider';
 import LandingPage from './pages/LandingPage';
-import Home from './pages/Home';
 import StudentProfile from './pages/StudentProfile';
 import Overview from './pages/Dashboard/Overview';
 import Institution from './pages/Dashboard/Institution';
-import Verifier from './pages/Dashboard/Verifier';
 import SkillVerifier from './pages/SkillVerifier';
+import IssueCertificate from './pages/IssueCertificate';
+import ClaimCredentials from './pages/ClaimCredentials';
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/profile/:id" element={<StudentProfile />} />
+    <WalletContextProvider>
+      <Router>
+        <Routes>
+          {/* Landing / Home */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<LandingPage />} />
 
-        {/* Dashboard Routes */}
-        <Route path="/dashboard" element={<Overview />} />
-        <Route path="/dashboard/overview" element={<Overview />} />
-        <Route path="/dashboard/institution" element={<Institution />} />
-        <Route path="/dashboard/verifier" element={<SkillVerifier />} />
-        <Route path="/dashboard/verifier-legacy" element={<Verifier />} />
-        <Route path="/verifier" element={<SkillVerifier />} />
+          {/* Student profile - requires wallet connection */}
+          <Route path="/profile/:id" element={<StudentProfile />} />
+          <Route path="/profile/me" element={<StudentProfile />} />
+          <Route path="/claim" element={<ClaimCredentials />} />
 
-        {/* 404 Fallback */}
-        <Route path="*" element={<LandingPage />} />
-      </Routes>
-    </Router>
+          {/* Dashboard */}
+          <Route path="/dashboard" element={<Overview />} />
+          <Route path="/dashboard/overview" element={<Overview />} />
+          <Route path="/dashboard/institution" element={<Institution />} />
+          <Route path="/dashboard/issue" element={<IssueCertificate />} />
+
+          {/* Skill Verifier */}
+          <Route path="/verifier" element={<SkillVerifier />} />
+          <Route path="/dashboard/verifier" element={<SkillVerifier />} />
+
+          {/* Redirect unknown paths to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </WalletContextProvider>
   );
 }

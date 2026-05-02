@@ -1,10 +1,20 @@
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import Sidebar from '../../features/dashboard/Sidebar';
 import StatCard from '../../features/dashboard/StatCard';
 import ActivityTable from '../../features/dashboard/ActivityTable';
+import { getStats } from '../../utils/api';
 
 export default function Overview() {
+  const [stats, setStats] = useState({ totalCertificates: '--', totalStudents: '--', avgVerificationTime: null });
+
+  useEffect(() => {
+    getStats().then(res => {
+      if (res.success) setStats(res);
+    }).catch(() => {});
+  }, []);
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <Navbar />
@@ -19,9 +29,9 @@ export default function Overview() {
 
             {/* Stats Grid */}
             <div className="grid md:grid-cols-3 gap-6">
-              <StatCard label="Total Students" value="2,847" change="12%" />
-              <StatCard label="Credentials Minted" value="1,256" change="23%" />
-              <StatCard label="Avg Verification Time" value="2.3h" change="-5%" />
+              <StatCard label="Total Students" value={stats.totalStudents} sub="Distinct wallet holders" />
+              <StatCard label="Credentials Minted" value={stats.totalCertificates} sub="On-chain records" />
+              <StatCard label="Avg Verification Time" value={stats.avgVerificationTime || 'N/A'} sub="Not tracked by the current API" />
             </div>
 
             {/* Activity Table */}

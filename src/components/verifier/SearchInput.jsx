@@ -7,7 +7,7 @@ const SearchInput = () => (
     </div>
     <input 
       type="text" 
-      placeholder="Paste student profile link (e.g. certachain.io/profile/alex-chen)"
+      placeholder="Paste a student wallet or profile link"
       className="flex-1 bg-transparent py-3 text-sm focus:outline-none placeholder:text-slate-300"
     />
     <button className="bg-black text-white px-8 py-3 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors">

@@ -7,7 +7,7 @@ export default function SearchInput() {
       <Search size={20} className="text-gray-400" />
       <input
         type="text"
-        placeholder="Search skills or credentials..."
+        placeholder="Search by wallet address"
         className="flex-1 bg-transparent outline-none text-gray-900 placeholder-gray-400"
       />
     </Card>

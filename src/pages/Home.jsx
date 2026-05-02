@@ -28,11 +28,11 @@ export default function Home() {
           </p>
 
           <div className="flex gap-4 flex-col sm:flex-row">
-            <Button variant="primary" className="flex items-center justify-center gap-2 group">
+            <Button to="/claim" variant="primary" className="flex items-center justify-center gap-2 group">
               Claim Credentials
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button variant="secondary">
+            <Button to="/dashboard/overview" variant="secondary">
               Join as Institution
             </Button>
           </div>
@@ -90,8 +90,8 @@ export default function Home() {
             Join thousands of students and institutions moving education to the global ledger.
           </p>
           <div className="flex gap-4 justify-center flex-col sm:flex-row">
-            <Button variant="gradient">Get Started Now</Button>
-            <Button variant="ghost" className="text-white border-2 border-gray-600 hover:bg-gray-800">
+            <Button to="/verifier" variant="gradient">Get Started Now</Button>
+            <Button to="/home" variant="ghost" className="text-white border-2 border-gray-600 hover:bg-gray-800">
               View Demo Registry
             </Button>
           </div>
